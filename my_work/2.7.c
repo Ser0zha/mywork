@@ -1,4 +1,4 @@
-//Сортировка массива*
+//Sortirovka array*
 #include <stdio.h>
 #define N 100
 
