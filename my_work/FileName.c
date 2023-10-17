@@ -2,15 +2,11 @@
 #define N 100
 
 int main() {
-    int n, i, quantity = 0, summa = 0, maximum = -1, flag = 0;
-    int arr[N];
+    int n = 0, i, quantity = 0, summa = 0, maximum = -1, flag = 0, t, arr[N];
     printf("Enter Natural number:\n");
-    if (!scanf_s("%d", &n)) {
+    t = scanf_s("%d", &n);
+    if (t == 0 || n >= N || n <= 0) {
         printf("ERROR: Invalid array size entered\n");
-        return 0;
-    }
-    if (n > 100 || n <= 0) {
-        printf("ERROR: Array size entered incorrectly");
         return 0;
     }
     for (i = 0; i < n; i++) {
@@ -25,8 +21,7 @@ int main() {
         }
     }
     if (maximum == -1) {
-        printf("ERROR: Upper bound number not found\n");
-        return 0;
+     
     }
     i = 0;
     for (; i < n; i++) {
@@ -35,13 +30,17 @@ int main() {
             break;
         }
     }
-    if (!flag || (i == n - 1) || (i > maximum)) {
-        printf("ERROR: Number lower bounds not found");
-        return 0;
+    if (maximum == -1) {
+        for (; i <= n - 1; i++) {
+            summa += arr[i];
+            quantity++;
+        }
     }
-    for (; i <= maximum; i++) {
-        summa += arr[i];
-        quantity++;
+    else {
+        for (; i <= maximum; i++) {
+            summa += arr[i];
+            quantity++;
+        }
     }
     printf("Your sum of array: %d\n", summa);
     printf("Quantity of elements: %d", quantity);
