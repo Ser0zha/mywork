@@ -20,9 +20,6 @@ int main() {
            maximum = i;
         }
     }
-    if (maximum == -1) {
-     
-    }
     i = 0;
     for (; i < n; i++) {
         if (-10 <= arr[i] && arr[i] <= 10) {
