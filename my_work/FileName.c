@@ -1,8 +1,25 @@
 #include <stdio.h>
 #define N 100
 
+int algorithm(int n, int x1, int max, int array[], int *quantity) {
+    int i, summa = 0;
+    if (x1 == -1) {
+        for (i = x1; i < n; i++) {
+            summa += array[i];
+            ++*quantity;
+        }
+    }
+    else {
+        for (i = x1; i <= max; i++) {
+            summa += array[i];
+            ++*quantity;
+        }
+    }
+    return summa;
+}
+
 int main() {
-    int n = 0, i, quantity = 0, summa = 0, maximum = -1, flag = 0, t, arr[N];
+    int n = 0, i, quantity = 0, summa = 0, maximum = -1, element = 0, t, arr[N], value = -1;
     printf("Enter Natural number:\n");
     t = scanf_s("%d", &n);
     if (t == 0 || n >= N || n <= 0) {
@@ -16,30 +33,22 @@ int main() {
         }
     }
     for (i = 0; i < n; i++) {
-        if ((i * i) == arr[i]) {
-           maximum = i;
-        }
-    }
-    i = 0;
-    for (; i < n; i++) {
         if (-10 <= arr[i] && arr[i] <= 10) {
-            flag = 1;
+            element = i;
+            value = arr[i];
             break;
         }
     }
-    if (maximum == -1) {
-        for (; i <= n - 1; i++) {
-            summa += arr[i];
-            quantity++;
-        }
+    if (value == -1) {
+        printf("No such elements found!");
     }
     else {
-        for (; i <= maximum; i++) {
-            summa += arr[i];
-            quantity++;
+        for (i = maximum + 1; i < n; i++) {
+            if ((i * i) == arr[i]) {
+                maximum = i;
+            }
         }
+        printf("Your sum of array: %d\nQuantity of elements : %d", algorithm(n, element, maximum, arr, &quantity), quantity);
     }
-    printf("Your sum of array: %d\n", summa);
-    printf("Quantity of elements: %d", quantity);
     return 0;
 }
