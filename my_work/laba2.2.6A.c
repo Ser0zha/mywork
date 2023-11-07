@@ -51,7 +51,18 @@ int funindicator(int mat[][N], int n, int m) {
         return 0;
     }
 }
-
+int MatIn(int mat[][N], int n, int m) {
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++) {
+            if (!scanf_s("%d", &mat[i][j])) {
+                printf("ERROR: Invalid array value entered\n");
+                return 0;
+            }
+        }
+    }
+    return mat;
+}
 int main() {
     int n = 0, m = 0, A[N][N], B[N][N], t, i, j, k = 0, max = -2;
 
@@ -63,14 +74,8 @@ int main() {
     }
 
     printf("Enter your matrix: \n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < m; j++) {
-            if (!scanf_s("%d", &A[i][j])) {
-                printf("ERROR: Invalid array value entered\n");
-                return 0;
-            }
-        }
-    }
+    MatIn(A, n, m);
+
     if (!(funout(A, B, n, m))) {
         printf("No such column found!");
         return 0;
