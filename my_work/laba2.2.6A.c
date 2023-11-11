@@ -31,25 +31,29 @@ int funout(int Amat[][N], int Bmat[][N], int Sizen, int Sizem) {
     return Bmat;
 }
 int funindicator(int mat[][N], int n, int m) {
-    int i, j, k = 0, max = -2;
+    int i, j, max = -2, flag = 0;
     for (j = m - 1; j >= 0; j--) {
-        for (i = 0; i < n; i++) {
-            if ((mat[i][j] >= 0) && (mat[i][j] > mat[i + 1][j])) {
-                k += 1;
+        flag = 1;
+        if (n == 1) {
+            for (i = 0; i < n; i++) {
+                if (mat[i][j] < 0)
+                    flag = 0;
             }
         }
-        if (k == n) {
+        for (i = 0; i < n - 1; i++) {
+            if (mat[i][j] < 0)
+                flag = 0;
+            if (mat[i + 1][j] < 0)
+                flag = 0;
+            if (mat[i][j] <= mat[i + 1][j])
+                flag = 0;
+        }
+        if (flag == 1) {
             max = j;
             break;
         }
-        if (k < n) {
-            k = 0;
-        }
     }
     return max;
-    if (max == -2) {
-        return 0;
-    }
 }
 int MatIn(int mat[][N], int n, int m) {
     int i, j;
@@ -64,11 +68,11 @@ int MatIn(int mat[][N], int n, int m) {
     return mat;
 }
 int main() {
-    int n = 0, m = 0, A[N][N], B[N][N], t, i, j, k = 0, max = -2;
+    int n = 0, m = 0, A[N][N], B[N][N], t;
 
     printf("Enter array size: ");
     t = scanf_s("%d %d", &n, &m);
-    if (!t || (n, m) > N || (n, m) < 1 || n == m) {
+    if (!t || (n, m) > N || (n, m) < 1) {
         printf("ERROR: Invalid array size entered");
         return 0;
     }
@@ -80,7 +84,7 @@ int main() {
         printf("No such column found!");
         return 0;
     }
-    printf("Matrix A:\n");
+    printf("Matrix A:\n\a");
     printM(A, n, m);
     printf("Matrix B:\n");
     printM(B, n, (m - 1));
