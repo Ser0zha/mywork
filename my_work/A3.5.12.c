@@ -25,7 +25,7 @@ static int scan_word(Word* word, int *max) {
             word->n_elements = 0;
             word->inf = 0;
             *max = -1;
-            printf("Error");
+            printf("Error, use number!");
             return 1;
         }
         if ((c == '.') || (c == '!') || (c == '?')) {
@@ -42,7 +42,7 @@ static int scan_word(Word* word, int *max) {
             free(str);
             word->n_elements = 0;
             word->inf = 0;
-            printf("Error");
+            printf("Error, word is full!");
             return 1;
         }
     }
@@ -56,7 +56,7 @@ int scan_text(Word* word) {
     while (!scan_word(pWord, &maxi)) {
         s++;
         if (s > 30) {
-            printf("Error");
+            printf("Error, sentence is full");
             return -1;
         }
         pWord->next = creat_word();
@@ -66,16 +66,13 @@ int scan_text(Word* word) {
 }
 void print_word_index(Word *word, int maxx) {
     Word *pList = word;
-    short n = 0, f = 0;
+    short n = 0;
     while (pList!=NULL) {
         if (pList->n_elements == maxx) {
             printf("%s ", pList->inf);
         }
         pList=pList->next;
-        f++;
     }
-    if (f = 0)
-        printf("Not found");
 }
 void main() {
     int max;
