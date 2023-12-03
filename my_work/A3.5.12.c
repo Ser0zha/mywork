@@ -75,10 +75,10 @@ void print_word_index(Word *word, int maxx) {
     }
 }
 void main() {
-    int max;
+	int max;
 	Word* word_list = creat_word();
 	max = scan_text(word_list);
-    if (max == -1)
-        return 0;
+    	if (max == -1)
+        	return 0;
 	print_word_index(word_list, max);
 }
