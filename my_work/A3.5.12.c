@@ -29,7 +29,7 @@ static int scan_word(Word* word, int* max, int* s) {
         printf("Error, memory!");
         return NULL;
     }
-    while (scanf("%c", &c) && (c != ' ' && c != ',')) {
+    while (scanf("%c", &c) && (c != ' ')) {
         if ('0' <= c && c <= '9') {
             free(str);
             word->n_elements = 0;
