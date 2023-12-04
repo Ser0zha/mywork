@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define charlimit 20
-#define strlimit 30
+#define wordlimit 30
 
 typedef struct Word {
     char* inf; // Массив символов
@@ -21,15 +21,15 @@ static Word* creat_word() {
     return word;
 }
 
-static int scan_word(Word* word, int* max, int *ss) {
+static int scan_word(Word* word, int* max, int* s) {
     *max = 0;
-    char* str;
     char c;
-    if (!(str = (char*)malloc(word->n_elements + 1))) {
+    char* str;
+    if (!(str = (char*)malloc(word->n_elements + 1))){
         printf("Error, memory!");
         return NULL;
-    } 
-    while (scanf("%c", &c) && (c != ' ')) {
+    }
+    while (scanf("%c", &c) && (c != ' ' && c != ',')) {
         if ('0' <= c && c <= '9') {
             free(str);
             word->n_elements = 0;
@@ -44,14 +44,18 @@ static int scan_word(Word* word, int* max, int *ss) {
             return 1;
         }
         if (!(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z'))) {
+            free(str);
+            word->n_elements = 0;
+            word->inf = 0;
             printf("U cannot use prohibited characters!");
+            *max = -1;
             return 1;
         }
+        ++*s;
         str[word->n_elements] = c;
         word->n_elements++;
         if (*max < word->n_elements)
             *max = word->n_elements;
-        ss++;
         if (!(str = (char*)realloc(str, word->n_elements + 1))) {
             printf("Error, memory!");
             return NULL;
@@ -61,6 +65,7 @@ static int scan_word(Word* word, int* max, int *ss) {
             word->n_elements = 0;
             word->inf = 0;
             printf("Error, word is full!");
+            *max = -1;
             return 1;
         }
     }
@@ -72,7 +77,7 @@ int scan_text(Word* word) {
     int maxi = 0, s = 1;
     Word* pWord = word;
     while (!scan_word(pWord, &maxi, &s)) {
-        if (s > strlimit) {
+        if (s > wordlimit) {
             printf("Error, sentence is full!");
             return -1;
         }
@@ -106,7 +111,7 @@ void main() {
     Word* word_list = creat_word();
     max = scan_text(word_list);
     if (max == -1)
-        return;
+        return 0;
     else if (max == 0) {
         printf("NULL");
         return;
