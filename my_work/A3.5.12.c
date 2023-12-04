@@ -25,7 +25,7 @@ static int scan_word(Word* word, int* max, int* s) {
     *max = 0;
     char c;
     char* str;
-    if (!(str = (char*)malloc(word->n_elements + 1))){
+    if (!(str = (char*)malloc(word->n_elements + 1))) {
         printf("Error, memory!");
         return NULL;
     }
@@ -111,7 +111,7 @@ void main() {
     Word* word_list = creat_word();
     max = scan_text(word_list);
     if (max == -1)
-        return 0;
+        return;
     else if (max == 0) {
         printf("NULL");
         return;
