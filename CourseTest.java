@@ -56,36 +56,37 @@ public class CourseTest {
     }
 
     @Test
-    void constructorShouldThrowForInvalidMaxStudents() {
+    void throwExceptionMaxStudents() {
         assertThatThrownBy(() -> new Course(0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    // Тестовые классы
+
     @Nested
     class CourseIsNotFullTest {
 
         Course course = createNotFullCourse();
 
         /**
-         * Действие: enroll(student2)
+         * Действие: Добавляем студента enroll(student2) (1-й уже добавлен)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2];
          * Курс остается в состоянии CourseIsNotFull
          */
         @Test
-        void enrollShouldAddStudent() {
+        void enrollAddStudent() {
             course.enroll(student2);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1, student2);
+            assertCourseIsNotFull(course);
         }
 
         /**
-         * Действие: enroll(student1)
+         * Действие: Добавляем студента, который существует enroll(student1)
          * Ожидаемый результат: getEnrollmentList вернет список из [1];
          * Курс остается в состоянии CourseIsNotFull
          */
         @Test
-        void enrollShouldDoNotAddEnrolledStudent() {
+        void existingStudentWillNotBeAdded() {
             course.enroll(student1);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1);
@@ -93,13 +94,12 @@ public class CourseTest {
         }
 
         /**
-         * Действие: unenroll(student1)
+         * Действие: удаляем единственного студента unenroll(student1)
          * Ожидаемый результат: getEnrollmentList вернет пустой список [];
-         * Курс остается в  =состоянии CourseIsNotFull
+         * Курс остается в состоянии CourseIsNotFull
          */
-
         @Test
-        void unenrollShouldRemoveStudent() {
+        void deleteExistingStudent() {
             course.unenroll(student1);
             assertThat(course.getEnrollmentList()).isEmpty();
             assertCourseIsNotFull(course);
@@ -111,7 +111,7 @@ public class CourseTest {
          * Курс остается в = состоянии CourseIsNotFull
          */
         @Test
-        void unenrollShouldDoNotRemoveUnenrolledStudent() {
+        void removeANonExistentStudent() {
             course.unenroll(student2);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1);
@@ -125,7 +125,7 @@ public class CourseTest {
          * Ожидаемый результат: объект перейдет в состояние CourseIsFull
          */
         @Test
-        void enrollingStudentMakesCourseIsFull(){
+        void theListIsComplete(){
             course.enroll(student2);
             course.enroll(student3);
             assertCourseIsFull(course);
@@ -142,7 +142,7 @@ public class CourseTest {
          * Курс остается в состоянии CourseIsFull
          */
         @Test
-        void enrollShouldDoNotAddEnrolledStudentInFull() {
+        void doNotAddExistingStudentToTheCompleteList() {
             course.enroll(student1);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1, student2, student3);
@@ -150,12 +150,12 @@ public class CourseTest {
         }
 
         /**
-         * Действие:unenroll(student4)
+         * Действие: Удаление unenroll(student4)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * Курс остается в состоянии CourseIsFull
          */
         @Test
-        void unenrollIgnoreRemoveUnenrolledStudent(){
+        void doNotRemoveNewStudentToTheCompleteList(){
             course.unenroll(student4);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1, student2, student3);
@@ -163,12 +163,12 @@ public class CourseTest {
         }
 
         /**
-         * Действие:unenroll(student2)
+         * Действие: Удаление unenroll(student2)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 3];
          * Курс переходит в состояние CourseIsNotFull
          */
         @Test
-        void unenrollRemoveUnenrolledStudent(){
+        void removeExistingStudentToTheCompleteList(){
             course.unenroll(student2);
             assertThat(course.getEnrollmentList())
                     .containsExactly(student1, student3);
@@ -176,20 +176,16 @@ public class CourseTest {
         }
 
         /**
-         * Действие:enroll(student4)
+         * Действие: enroll(student4)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [4];
          * Курс переходит в состояние WaitingListIsNotEmpty
          */
         @Test
-        void enrollShouldAddToWaitingWhenCourseFull() {
+        void addNewStudentToTheWaitingList() {
             course.enroll(student4);
-
-            assertThat(course.getWaitingList())
-                    .containsExactly(student4);
-            assertThat(course.getEnrollmentList())
-                    .containsExactly(student1, student2, student3);
-
+            assertThat(course.getWaitingList()).containsExactly(student4);
+            assertThat(course.getEnrollmentList()).containsExactly(student1, student2, student3);
             assertWaitingListIsNotEmpty(course);
         }
     }
@@ -199,7 +195,7 @@ public class CourseTest {
         Course course = createCourseWithWaitingOne();
 
         /**
-         * Действие:enroll(student1)
+         * Действие: enroll(student1)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [4];
          * Курс остается в состоянии WaitingListIsNotEmpty
@@ -213,7 +209,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:enroll(student4)
+         * Действие: enroll(student4)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [4];
          * Курс остается в состоянии WaitingListIsNotEmpty
@@ -227,7 +223,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:enroll(student5)
+         * Действие: enroll(student5)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [4, 5];
          * Курс остается в состоянии WaitingListIsNotEmpty
@@ -241,7 +237,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:unenroll(student5)
+         * Действие: unenroll(student5)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [4];
          * Курс остается в состоянии WaitingListIsNotEmpty
@@ -255,7 +251,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:enroll(student5)
+         * Действие: enroll(student5)
          * unenroll(student4)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [5];
@@ -271,7 +267,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:enroll(student5)
+         * Действие: enroll(student5)
          * unenroll(student1)
          * Ожидаемый результат: getEnrollmentList вернет список из [2, 3, 4];
          * getWaitingList вернет список из [5];
@@ -288,7 +284,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:unenroll(student1)
+         * Действие: unenroll(student1)
          * Ожидаемый результат: getEnrollmentList вернет список из [2, 3, 4];
          * getWaitingList вернет список из [];
          * Курс переходит в состояние CourseIsFull
@@ -302,7 +298,7 @@ public class CourseTest {
         }
 
         /**
-         * Действие:unenroll(student4)
+         * Действие: unenroll(student4)
          * Ожидаемый результат: getEnrollmentList вернет список из [1, 2, 3];
          * getWaitingList вернет список из [];
          * Курс переходит в состояние CourseIsFull
